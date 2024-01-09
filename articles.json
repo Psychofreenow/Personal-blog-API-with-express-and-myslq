@@ -1,0 +1,38 @@
+[
+	{
+		"article_id": "3008ad1e-5c56-44ee-b7c4-0bef037245e6",
+		"title": "Cómo hacer una torta de chocolate",
+		"content": "Aprender a programar puede parecer intimidante al principio, pero con la práctica y la paciencia, cualquiera puede hacerlo. Hay muchos recursos en línea gratuitos y de pago que pueden ayudarte a aprender a programar, como Codecademy, FreeCodeCamp y Udemy. También puedes unirte a grupos de estudio en línea o asistir a eventos de programación en persona para conocer a otros programadores y aprender de ellos.",
+		"category": "cocina"
+	},
+	{
+		"article_id": "3bef87b9-41a1-4369-915d-097301efce44",
+		"title": "¿Qué es el coronavirus?",
+		"content": "El coronavirus es una enfermedad infecciosa causada por un virus recientemente descubierto. La mayoría de las personas infectadas con el virus experimentan síntomas leves a moderados y se recuperan sin tratamiento especial.",
+		"category": "salud"
+	},
+	{
+		"article_id": "4b3377b0-7c16-46a8-81b5-f38df2ba7b9a",
+		"title": "Cómo hacer una ensalada de pollo",
+		"content": "La ensalada de pollo es una comida saludable y deliciosa. Para hacer una ensalada de pollo, necesitarás pechugas de pollo cocidas, lechuga, tomates, pepinos, cebolla roja, aguacate y aderezo para ensaladas. Corta los ingredientes en trozos pequeños y mezcla todo en un tazón grande. Agrega el aderezo y mezcla bien antes de servir.",
+		"category": "cocina"
+	},
+	{
+		"article_id": "a50cd355-9cea-4735-9e7c-433e0439e715",
+		"title": "Cómo cultivar tomates",
+		"content": "Los tomates son una planta popular para cultivar en el jsardín. Para cultivar tomates, necesitarás semillas o plántulas, tierra para macetas, fertilizante y agua. Planta las semillas o plántulas en una maceta grande o en el suelo, y asegúrate de regarlas regularmente y fertilizarlas según sea necesario. Los tomates generalmente tardan de 60 a 80 días en madurar.",
+		"category": "jardineria"
+	},
+	{
+		"article_id": "cf02d0e5-773a-4753-b16c-161bacbb10cd",
+		"title": "Cómo aprender a programar",
+		"content": "Aprender a programar puede parecer intimidante al principio, pero con la práctica y la paciencia, cualquiera puede hacerlo. Hay muchos recursos en línea gratuitos y de pago que pueden ayudarte a aprender a programar, como Codecademy, FreeCodeCamp y Udemy. También puedes unirte a grupos de estudio en línea o asistir a eventos de programación en persona para conocer a otros programadores y aprender de ellos.",
+		"category": "programacion"
+	},
+	{
+		"article_id": "fd0a1049-f508-4a71-b57e-bc953de44ca6",
+		"title": "Cómo hacer ejercicio en casa",
+		"content": "Hacer ejercicio en casa es una excelente manera de mantenerse en forma sin tener que ir al gimnasio. Puedes hacer ejercicios de cardio como saltar la cuerda o correr en su lugar, o ejercicios de fuerza como flexiones y sentadillas. También puedes seguir videos de ejercicios en línea o unirte a clases de fitness en línea. Asegúrate de tener suficiente espacio y equipo de ejercicio antes de comenzar.",
+		"category": "salud"
+	}
+]

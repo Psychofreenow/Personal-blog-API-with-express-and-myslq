@@ -1,0 +1,40 @@
+
+DROP DATABASE IF EXISTS freenowcompany_db;
+
+CREATE database freenowcompany_db;
+
+USE freenowcompany_db;
+
+CREATE TABLE articles (
+    article_id VARCHAR(36) NOT NULL DEFAULT(UUID()),
+    title VARCHAR(255) NOT NULL UNIQUE, 
+    content TEXT NOT NULL,
+    create_at TIMESTAMP NOT NULL DEFAULT (NOW()),
+    PRIMARY KEY(article_id)
+) ENGINE = InnoDB;
+
+CREATE TABLE categories(
+    id_categories INT NOT NULL AUTO_INCREMENT,
+    category VARCHAR(60) NOT NULL,
+    article_id VARCHAR(36) NOT NULL,
+    FOREIGN KEY(article_id) REFERENCES articles(article_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY(id_categories)
+) ENGINE = InnoDB; 
+
+INSERT INTO articles(article_id, title, content)
+VALUES 
+("3bef87b9-41a1-4369-915d-097301efce44", "¿Qué es el coronavirus?", "El coronavirus es una enfermedad infecciosa causada por un virus recientemente descubierto. La mayoría de las personas infectadas con el virus experimentan síntomas leves a moderados y se recuperan sin tratamiento especial."),
+("3008ad1e-5c56-44ee-b7c4-0bef037245e6", "Cómo hacer una torta de chocolate", "Aprender a programar puede parecer intimidante al principio, pero con la práctica y la paciencia, cualquiera puede hacerlo. Hay muchos recursos en línea gratuitos y de pago que pueden ayudarte a aprender a programar, como Codecademy, FreeCodeCamp y Udemy. También puedes unirte a grupos de estudio en línea o asistir a eventos de programación en persona para conocer a otros programadores y aprender de ellos."),
+("cf02d0e5-773a-4753-b16c-161bacbb10cd", "Cómo aprender a programar",  "Aprender a programar puede parecer intimidante al principio, pero con la práctica y la paciencia, cualquiera puede hacerlo. Hay muchos recursos en línea gratuitos y de pago que pueden ayudarte a aprender a programar, como Codecademy, FreeCodeCamp y Udemy. También puedes unirte a grupos de estudio en línea o asistir a eventos de programación en persona para conocer a otros programadores y aprender de ellos."),
+("a50cd355-9cea-4735-9e7c-433e0439e715", "Cómo cultivar tomates",  "Los tomates son una planta popular para cultivar en el jsardín. Para cultivar tomates, necesitarás semillas o plántulas, tierra para macetas, fertilizante y agua. Planta las semillas o plántulas en una maceta grande o en el suelo, y asegúrate de regarlas regularmente y fertilizarlas según sea necesario. Los tomates generalmente tardan de 60 a 80 días en madurar."),
+("fd0a1049-f508-4a71-b57e-bc953de44ca6", "Cómo hacer ejercicio en casa", "Hacer ejercicio en casa es una excelente manera de mantenerse en forma sin tener que ir al gimnasio. Puedes hacer ejercicios de cardio como saltar la cuerda o correr en su lugar, o ejercicios de fuerza como flexiones y sentadillas. También puedes seguir videos de ejercicios en línea o unirte a clases de fitness en línea. Asegúrate de tener suficiente espacio y equipo de ejercicio antes de comenzar."),
+("4b3377b0-7c16-46a8-81b5-f38df2ba7b9a", "Cómo hacer una ensalada de pollo", "La ensalada de pollo es una comida saludable y deliciosa. Para hacer una ensalada de pollo, necesitarás pechugas de pollo cocidas, lechuga, tomates, pepinos, cebolla roja, aguacate y aderezo para ensaladas. Corta los ingredientes en trozos pequeños y mezcla todo en un tazón grande. Agrega el aderezo y mezcla bien antes de servir.");
+
+INSERT INTO categories(category, article_id)
+VALUES 
+("salud", "3bef87b9-41a1-4369-915d-097301efce44"),
+("cocina", "3008ad1e-5c56-44ee-b7c4-0bef037245e6"),
+("programacion", "cf02d0e5-773a-4753-b16c-161bacbb10cd"),
+("jardineria", "a50cd355-9cea-4735-9e7c-433e0439e715"), 
+("salud", "fd0a1049-f508-4a71-b57e-bc953de44ca6"),
+("cocina", "4b3377b0-7c16-46a8-81b5-f38df2ba7b9a");
