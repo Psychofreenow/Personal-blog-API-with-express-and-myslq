@@ -1,0 +1,3 @@
+- configurar origenes de CORS
+- hacer una validación de rutas para una que sea de una ADMINISTRADOR y que sea quien pueda borrar, crear y actualizar artuculos
+- hacer el blog como markdown

@@ -2,11 +2,14 @@ import express from 'express';
 import { articlesRouter } from './routes/articles.js';
 import 'dotenv/config.js';
 import resError from './utils/resError.js';
+import cors from 'cors';
 
 const app = express();
 
 app.use(express.json());
 
+//Por defecto da acceso a todos lo origines "*", por lo que luego se debe de configurar. Luego lo configuraré para hacerlo correctamente.
+app.use(cors());
 app.disable('x-powered-by');
 
 app.use('/articles', articlesRouter);
