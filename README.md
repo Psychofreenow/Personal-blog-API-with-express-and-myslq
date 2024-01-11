@@ -1,3 +1,8 @@
-- configurar origenes de CORS
-- hacer una validación de rutas para una que sea de una ADMINISTRADOR y que sea quien pueda borrar, crear y actualizar artuculos
-- hacer el blog como markdown
+# To do:
+
+* [ ] configurar origenes de CORS
+* [ ] hacer una AUTH
+* [ ] arreglar el tema errores, donde todos lo errores criticos enviarlos a un servicio para que estos no vayan a cliente
+* [ ] hacer un README en condiciones
+* [ ] reemplazar las respuestas de patch por un codigo 204
+* [ ] hacer testing
