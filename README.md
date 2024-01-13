@@ -6,3 +6,4 @@
 * [ ] hacer un README en condiciones
 * [ ] reemplazar las respuestas de patch por un codigo 204
 * [ ] hacer testing
+* [ ] revisar luego el manejo de errores y ver como puedo aprovechar el manejador de express

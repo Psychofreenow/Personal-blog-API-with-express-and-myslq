@@ -1,3 +1,4 @@
+-- CREAR TABLAS PARA LOS ARTICULOS 
 
 DROP DATABASE IF EXISTS freenowcompany_db;
 
@@ -14,11 +15,11 @@ CREATE TABLE articles (
 ) ENGINE = InnoDB;
 
 CREATE TABLE categories(
-    id_categories INT NOT NULL AUTO_INCREMENT,
+    id_category INT NOT NULL AUTO_INCREMENT,
     category VARCHAR(60) NOT NULL,
     article_id VARCHAR(36) NOT NULL,
     FOREIGN KEY(article_id) REFERENCES articles(article_id) ON UPDATE CASCADE ON DELETE CASCADE,
-    PRIMARY KEY(id_categories)
+    PRIMARY KEY(id_category)
 ) ENGINE = InnoDB; 
 
 INSERT INTO articles(article_id, title, content)
@@ -38,3 +39,27 @@ VALUES
 ("jardineria", "a50cd355-9cea-4735-9e7c-433e0439e715"), 
 ("salud", "fd0a1049-f508-4a71-b57e-bc953de44ca6"),
 ("cocina", "4b3377b0-7c16-46a8-81b5-f38df2ba7b9a");
+
+-- TABLAS PARA USERS Y ROLES
+
+CREATE TABLE roles(
+    rol_id INT AUTO_INCREMENT NOT NULL UNIQUE,
+    rol VARCHAR(255) NOT NULL,
+    PRIMARY KEY (rol_id)
+) ENGINE = InnoDB; 
+
+CREATE TABLE users (
+    user_id VARCHAR(36) NOT NULL DEFAULT(UUID()),
+    username VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE, 
+    password VARCHAR(255) NOT NULL UNIQUE,
+    rol_id INT NOT NULL,
+    FOREIGN KEY(rol_id) REFERENCES roles(rol_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY (user_id)
+) ENGINE = InnoDB;
+
+INSERT INTO roles(rol)
+VALUES 
+("admin"),
+("user_generic");
+
