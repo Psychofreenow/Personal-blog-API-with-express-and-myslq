@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 .env
-to-do.md
+PRIVATE_KEY.js
 *.local
 
 # Editor directories and files

@@ -5,8 +5,6 @@ export const singUp = async (req, res) => {
 	const newUser = await createUserModel({ input: req.body });
 
 	response(res, 201, newUser);
-	// console.log(newUser);
-	// res.json(newUser);
 };
 
 export const singin = async (req, res) => {

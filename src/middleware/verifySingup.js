@@ -12,17 +12,17 @@ export const isUserExist = async (req, res, next) => {
 
 		const connection = await connectionDB();
 
-		const [respuesta] = await connection.execute(
+		const [[respuesta]] = await connection.execute(
 			'SELECT username, email FROM users WHERE username = ? OR email = ?',
 			[username, email],
 		);
 
-		if (respuesta[0].username === username)
-			throw new ClientError('username exist, try another');
-		if (respuesta[0].email === email)
-			throw new ClientError('email exist, try another');
+		if (!respuesta) return next();
 
-		next();
+		if (respuesta.username === username)
+			throw new ClientError('username exist, try another');
+		if (respuesta.email === email)
+			throw new ClientError('email exist, try another');
 	} catch (error) {
 		return res.status(400).json({
 			success: false,
