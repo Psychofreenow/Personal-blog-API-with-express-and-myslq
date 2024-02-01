@@ -1,7 +1,7 @@
-const resError = (res, status, message) => {
+const resError = (res, status, response) => {
 	res.status(status).json({
 		success: false,
-		message,
+		response,
 	});
 };
 

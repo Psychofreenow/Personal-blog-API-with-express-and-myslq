@@ -11,9 +11,9 @@ import response from '../utils/response.js';
 export async function getAll(req, res) {
 	const { category } = req.query;
 
-	const articles = await getAllModel({ category });
+	const article = await getAllModel({ category });
 
-	response(res, 200, articles);
+	response(res, article.code, article);
 }
 
 export async function getById(req, res) {
@@ -27,7 +27,7 @@ export async function getById(req, res) {
 export async function create(req, res) {
 	const newArticle = await createModel({ input: req.body });
 
-	response(res, 201, newArticle);
+	response(res, newArticle.code, newArticle);
 }
 
 export async function update(req, res) {

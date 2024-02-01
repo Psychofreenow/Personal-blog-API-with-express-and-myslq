@@ -6,9 +6,8 @@ export class ClientError extends Error {
 }
 
 export class ValidationError extends Error {
-	constructor(message, status = 400, infoError) {
+	constructor(message, status = 400) {
 		super(message);
 		this.statusCode = status;
-		this.infoError = infoError;
 	}
 }
