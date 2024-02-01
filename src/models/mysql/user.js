@@ -1,10 +1,8 @@
 import { connectionDB } from '../../DB/connection.js';
-import {
-	partialValidateInputUser,
-	validateInputUser,
-} from '../../schemas/user.js';
+import { validateInputUser } from '../../schemas/user.js';
+import { validateInputUserLogin } from '../../schemas/userLogin.js';
 import bcrypt from 'bcryptjs';
-import { ValidationError } from '../../utils/errors.js';
+import { UnauthorizedError, ValidationError } from '../../utils/errors.js';
 import jwt from 'jsonwebtoken';
 import { PRIVATE_KEY } from '../../PRIVATE_KEY.js';
 
@@ -14,7 +12,7 @@ export const createUserModel = async ({ input }) => {
 		const result = validateInputUser(input);
 
 		if (!result.success)
-			throw new ValidationError('VALIDATION_ERROR', 400, result.error);
+			throw new ValidationError('your input data is not valid');
 
 		const { username, email, password } = result.data;
 
@@ -34,30 +32,29 @@ export const createUserModel = async ({ input }) => {
 			[username, email, encryptedPassword, rol.rol_id],
 		);
 
-		return { message: 'User was successfully created' };
+		return { code: 201, response: 'User was successfully created' };
 	} catch (error) {
-		if (error.message === 'VALIDATION_ERROR')
-			return {
-				success: false,
-				error: error.message,
-				infoError: error.infoError.issues,
+		if (error.statusCode === 400)
+			throw {
+				code: error.statusCode,
+				response: error.message,
 			};
 
-		return { success: false, error: error.message };
+		throw { completeError: error };
 	}
 };
 
 export const loginUserModel = async ({ input }) => {
+	const connection = await connectionDB();
+
 	try {
 		//validate data
-		const result = partialValidateInputUser(input);
+		const result = validateInputUserLogin(input);
 
 		if (!result.success)
-			throw new ValidationError('VALIDATION_ERROR', 400, result.error);
+			throw new ValidationError('your input data is not valid');
 
 		const { username, password } = result.data;
-
-		const connection = await connectionDB();
 
 		const [user] = await connection.execute(
 			'SELECT user_id, username, password FROM users WHERE username = ?',
@@ -65,16 +62,29 @@ export const loginUserModel = async ({ input }) => {
 		);
 
 		// validate password
-		const comparePassword = bcrypt.compare(password, user[0].password);
+		const comparePassword = await bcrypt.compare(password, user[0].password);
 
-		if (comparePassword) {
-			const token = jwt.sign({ id: user[0].user_id }, PRIVATE_KEY, {
-				expiresIn: 86400,
-			});
+		if (!comparePassword) throw new UnauthorizedError('Unauthorized');
 
-			return token;
-		}
+		const token = jwt.sign({ id: user[0].user_id }, PRIVATE_KEY, {
+			expiresIn: 86400,
+		});
+
+		return token;
 	} catch (error) {
-		return error;
+		if (error.statusCode === 400)
+			throw {
+				code: error.statusCode,
+				response: error.message,
+			};
+
+		if (error.statusCode === 401) {
+			throw {
+				code: error.statusCode,
+				response: error.message,
+			};
+		}
+
+		throw { completeError: error };
 	}
 };
