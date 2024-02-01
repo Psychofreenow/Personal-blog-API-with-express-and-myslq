@@ -11,3 +11,4 @@
 * [ ] Para más adelante opmitmizar el manejo de errores de errorsHandle, haciendo que errores inncesarios en el cliente vayan a algún servicio.
 * [ ] Comprobar el funcionamiento de los errores de connection.js
 * [ ] Comprobar luego lo errores de zod, y como manejarlos mejor con el errorsHandle
+* [ ] Hacer una documentación de API, para aprender.

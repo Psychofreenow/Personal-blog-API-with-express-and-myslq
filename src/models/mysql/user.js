@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import { PRIVATE_KEY } from '../../PRIVATE_KEY.js';
 
 export const createUserModel = async ({ input }) => {
+	const connection = await connectionDB();
 	try {
 		//validate data
 		const result = validateInputUser(input);
@@ -15,8 +16,6 @@ export const createUserModel = async ({ input }) => {
 			throw new ValidationError('your input data is not valid');
 
 		const { username, email, password } = result.data;
-
-		const connection = await connectionDB();
 
 		//encrypted password
 		const salt = await bcrypt.genSalt(10);
@@ -41,6 +40,8 @@ export const createUserModel = async ({ input }) => {
 			};
 
 		throw { completeError: error };
+	} finally {
+		connection.end();
 	}
 };
 
@@ -86,5 +87,7 @@ export const loginUserModel = async ({ input }) => {
 		}
 
 		throw { completeError: error };
+	} finally {
+		connection.end();
 	}
 };
