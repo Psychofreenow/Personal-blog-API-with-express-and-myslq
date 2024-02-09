@@ -1,37 +1,71 @@
 import { connectionDB } from '../../DB/connection.js';
-import { validateInputUser } from '../../schemas/user.js';
-import { validateInputUserLogin } from '../../schemas/userLogin.js';
+import { randomUUID } from 'node:crypto';
+import { validateInputUserCreate } from '../../schemas/userCreate.js';
 import bcrypt from 'bcryptjs';
-import { UnauthorizedError, ValidationError } from '../../utils/errors.js';
-import jwt from 'jsonwebtoken';
-import { PRIVATE_KEY } from '../../PRIVATE_KEY.js';
+import { ClientError, ValidationError } from '../../utils/errors.js';
 
 export const createUserModel = async ({ input }) => {
 	const connection = await connectionDB();
 	try {
-		//validate data
-		const result = validateInputUser(input);
-
+		const result = validateInputUserCreate(input);
 		if (!result.success)
-			throw new ValidationError('your input data is not valid');
+			throw new ValidationError(
+				'data entered is invalidated',
+				403,
+				result.error,
+			);
 
-		const { username, email, password } = result.data;
+		const newUser = {
+			user_id: randomUUID(),
+			...result.data,
+		};
+
+		const { user_id, username, email, password, rol_id } = newUser;
 
 		//encrypted password
 		const salt = await bcrypt.genSalt(10);
 		const encryptedPassword = await bcrypt.hash(password, salt);
 
-		//insert new user
-		const [[rol]] = await connection.execute(
-			'SELECT rol_id FROM roles WHERE rol = "user_generic"',
+		connection.execute(
+			'INSERT INTO users(user_id, username, email, password, rol_id) VALUES(?,?,?,?,?)',
+			[user_id, username, email, encryptedPassword, rol_id],
 		);
 
-		await connection.execute(
-			'INSERT INTO users(username, email, password, rol_id) VALUES(?,?,?,?)',
-			[username, email, encryptedPassword, rol.rol_id],
+		return {
+			code: 201,
+			response: `User with ${user_id} was successfully created`,
+		};
+	} catch (error) {
+		if (error.statusCode === 403)
+			throw {
+				code: error.statusCode,
+				response: error.completeErrors,
+			};
+		throw { completeError: error };
+	} finally {
+		connection.end();
+	}
+};
+
+export const getUserModel = async ({ username }) => {
+	const connection = await connectionDB();
+
+	try {
+		if (!username) {
+			const [users] = await connection.execute(
+				'SELECT user_id, username, email, rol_id FROM users;',
+			);
+			return { code: 200, response: users };
+		}
+
+		const [user] = await connection.execute(
+			'SELECT user_id, username, email, rol_id FROM users WHERE username = ?',
+			[username],
 		);
 
-		return { code: 201, response: 'User was successfully created' };
+		if (user.length === 0) throw new ClientError('user not found');
+
+		return { code: 200, response: user };
 	} catch (error) {
 		if (error.statusCode === 400)
 			throw {
@@ -45,47 +79,14 @@ export const createUserModel = async ({ input }) => {
 	}
 };
 
-export const loginUserModel = async ({ input }) => {
+export const deleteUserModel = async ({ id }) => {
 	const connection = await connectionDB();
 
 	try {
-		//validate data
-		const result = validateInputUserLogin(input);
+		await connection.execute('DELETE FROM users WHERE user_id = ?', [id]);
 
-		if (!result.success)
-			throw new ValidationError('your input data is not valid');
-
-		const { username, password } = result.data;
-
-		const [user] = await connection.execute(
-			'SELECT user_id, username, password FROM users WHERE username = ?',
-			[username],
-		);
-
-		// validate password
-		const comparePassword = await bcrypt.compare(password, user[0].password);
-
-		if (!comparePassword) throw new UnauthorizedError('Unauthorized');
-
-		const token = jwt.sign({ id: user[0].user_id }, PRIVATE_KEY, {
-			expiresIn: 86400,
-		});
-
-		return token;
+		return { code: 201, response: `User with ${id} was successfully deleted` };
 	} catch (error) {
-		if (error.statusCode === 400)
-			throw {
-				code: error.statusCode,
-				response: error.message,
-			};
-
-		if (error.statusCode === 401) {
-			throw {
-				code: error.statusCode,
-				response: error.message,
-			};
-		}
-
 		throw { completeError: error };
 	} finally {
 		connection.end();

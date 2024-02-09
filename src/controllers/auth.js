@@ -1,5 +1,5 @@
 import response from '../utils/response.js';
-import { createUserModel, loginUserModel } from '../models/mysql/user.js';
+import { createUserModel, loginUserModel } from '../models/mysql/auth.js';
 
 export const singUp = async (req, res) => {
 	const newUser = await createUserModel({ input: req.body });

@@ -1,28 +1,45 @@
 import jwt from 'jsonwebtoken';
 import { PRIVATE_KEY } from '../PRIVATE_KEY.js';
 import { connectionDB } from '../DB/connection.js';
+import { ClientError, UnauthorizedError } from '../utils/errors.js';
 
 export const verifyJwt = async (req, res, next) => {
 	let token = req.headers['x-access-token'];
-
-	if (!token) return res.status(403).json({ message: 'No token provided' });
+	const connection = await connectionDB();
 
 	try {
+		if (!token) throw new UnauthorizedError('No token provided', 401);
+
 		const decoded = jwt.verify(token, PRIVATE_KEY);
 		req.id = decoded;
-
-		const connection = await connectionDB();
 
 		const [user] = await connection.execute(
 			'SELECT username FROM users WHERE user_id = ?',
 			[req.id.id],
 		);
 
-		if (user.length === 0)
-			return res.status(404).json({ message: 'no user found' });
+		if (user.length === 0) throw new ClientError('no user found', 400);
 
 		next();
 	} catch (error) {
-		return res.status(401).json({ message: 'Unauthorized' });
+		if (error.statusCode === 401) {
+			next({
+				code: error.statusCode,
+				response: error.message,
+			});
+			return;
+		}
+
+		if (error.statusCode === 400) {
+			next({
+				code: error.statusCode,
+				response: error.message,
+			});
+			return;
+		}
+
+		next({ completeErrors: error });
+	} finally {
+		connection.end();
 	}
 };

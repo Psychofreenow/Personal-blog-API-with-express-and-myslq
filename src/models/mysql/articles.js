@@ -4,7 +4,7 @@ import {
 } from '../../schemas/articles.js';
 import { randomUUID } from 'node:crypto';
 import { connectionDB } from '../../DB/connection.js';
-import { ClientError } from '../../utils/errors.js';
+import { ClientError, ValidationError } from '../../utils/errors.js';
 
 export async function getAllModel({ category }) {
 	const connection = await connectionDB();
@@ -70,7 +70,12 @@ export async function createModel({ input }) {
 		// validate input data
 		const result = validateInputArticle(input);
 
-		if (!result.success) throw new ClientError('your input data is not valid');
+		if (!result.success)
+			throw new ValidationError(
+				'data entered is invalidated',
+				403,
+				result.error,
+			);
 
 		const newArticle = {
 			id: randomUUID(),
@@ -101,10 +106,10 @@ export async function createModel({ input }) {
 	} catch (error) {
 		await connection.rollback();
 
-		if (error.statusCode === 400)
+		if (error.statusCode === 403)
 			throw {
 				code: error.statusCode,
-				response: error.message,
+				response: error.completeErrors,
 			};
 		throw { completeError: error };
 	} finally {
@@ -118,7 +123,12 @@ export async function updateModel({ id, input }) {
 		//Validate input data
 		const result = partialValidateInputArticle(input);
 
-		if (!result.success) throw new ClientError('data entered is incorrect');
+		if (!result.success)
+			throw new ValidationError(
+				'data entered is invalidated',
+				403,
+				result.error,
+			);
 
 		const [article] = await connection.execute(
 			'SELECT title FROM articles WHERE article_id = ?',

@@ -5,7 +5,8 @@ import { ClientError, ValidationError } from '../utils/errors.js';
 export const isUserExist = async (req, res, next) => {
 	try {
 		const result = validateInputUser(req.body);
-		if (!result.success) throw new ValidationError('validation error', 400);
+		if (!result.success)
+			throw new ValidationError('validate error', 403, result.error);
 
 		const { username, email } = result.data;
 
@@ -23,9 +24,21 @@ export const isUserExist = async (req, res, next) => {
 		if (response.email === email)
 			throw new ClientError('email exist, try another');
 	} catch (error) {
-		next({
-			code: error.statusCode,
-			response: error.message,
-		});
+		if (error.statusCode === 403) {
+			next({
+				code: error.statusCode,
+				response: error.completeErrors,
+			});
+			return;
+		}
+
+		if (error.statusCode === 400) {
+			next({
+				code: error.statusCode,
+				response: error.message,
+			});
+		}
+
+		next({ completeErrors: error });
 	}
 };

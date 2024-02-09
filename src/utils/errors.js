@@ -6,9 +6,10 @@ export class ClientError extends Error {
 }
 
 export class ValidationError extends Error {
-	constructor(message, status = 403) {
+	constructor(message, status = 403, completeErrors) {
 		super(message);
 		this.statusCode = status;
+		this.completeErrors = completeErrors;
 	}
 }
 

@@ -4,6 +4,7 @@ import 'dotenv/config.js';
 import cors from 'cors';
 import { authRouter } from './routes/auth.js';
 import errorsHandle from './middleware/errorsHandle.js';
+import { userRouter } from './routes/user.js';
 
 const app = express();
 
@@ -14,8 +15,8 @@ app.use(cors());
 app.disable('x-powered-by');
 
 app.use('/api/article', articlesRouter);
-
 app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
 
 app.use(errorsHandle);
 
