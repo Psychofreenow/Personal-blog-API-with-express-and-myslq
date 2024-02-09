@@ -11,6 +11,6 @@
 * [X] Comprobar el funcionamiento de los errores de connection.js
 * [X] Comprobar luego lo errores de zod, y como manejarlos mejor con el errorsHandle.
 * [ ] Hacer una documentación de API, para aprender.
-* [ ] Hacer la ruta de para crear users.
+* [X] Hacer la ruta de para crear users.
 * [ ] Hacer un middleware para que cuando se lance el sistema por primera vez el primer usuario que se cree, sea el ADMIN.
 * [ ] feature: hacer que se puedan crear articulos con multiples categorias y por otro lado también se pueda recuperar 

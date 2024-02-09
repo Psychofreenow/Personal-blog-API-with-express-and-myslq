@@ -25,15 +25,14 @@ export const isUserExist = async (req, res, next) => {
 			throw new ClientError('email exist, try another');
 	} catch (error) {
 		if (error.statusCode === 403) {
-			next({
+			return next({
 				code: error.statusCode,
 				response: error.completeErrors,
 			});
-			return;
 		}
 
 		if (error.statusCode === 400) {
-			next({
+			return next({
 				code: error.statusCode,
 				response: error.message,
 			});
